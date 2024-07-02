@@ -28,6 +28,20 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    {
+        try
+        {
+            await _authService.RegisterAsync(request);
+            return Ok(new { message = "Registration successful" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("refresh-token")]
     public async Task<ActionResult<AuthResponseDto>> RefreshToken([FromBody] RefreshTokenRequestDto request)
     {
@@ -41,4 +55,5 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = ex.Message });
         }
     }
+
 }

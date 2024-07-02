@@ -61,6 +61,28 @@ namespace Application.Services
 
             return user.AccessToken;
         }
+        public async Task RegisterAsync(RegisterRequestDto request) // Update method signature
+        {
+            var existingUser = await _userRepository.GetUserByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("User already exists");
+            }
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Name = request.Name,
+                Email = request.Email,
+                PasswordHash = HashPassword(request.Password),
+                // Role = request.Role,
+                Role = Role.SuperAdmin,
+            };
+            user.AccessToken = GenerateJwtToken(user);
+            user.RefreshToken = GenerateRefreshToken();
+
+            await _userRepository.AddUserAsync(user);
+        }
 
         private string GenerateJwtToken(User user)
         {
@@ -90,6 +112,10 @@ namespace Application.Services
                 rng.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);
             }
+        }
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         private bool VerifyPassword(string password, string storedHash)
