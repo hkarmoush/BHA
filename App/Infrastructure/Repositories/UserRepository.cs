@@ -1,17 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-
 namespace Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(AppDbContext context) : IUserRepository
     {
-        private readonly AppDbContext _context;
-
-        public UserRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
@@ -23,7 +18,7 @@ namespace Infrastructure.Repositories
             return await _context.Users.FindAsync(id);
         }
 
-        public async Task<User> GetUserByRefreshTokenAsync(string refreshToken) // Implement this method
+        public async Task<User> GetUserByRefreshTokenAsync(string refreshToken)
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
