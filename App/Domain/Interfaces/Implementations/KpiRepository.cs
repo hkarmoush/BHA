@@ -15,6 +15,10 @@ public class KpiRepository : IKpiRepository
     {
         return await _context.Kpis.Where(k => k.Role == role).ToListAsync();
     }
+    public async Task<IEnumerable<Kpi>> GetAllKpisAsync()
+    {
+        return await _context.Kpis.ToListAsync();
+    }
 
     public async Task AddKpiAsync(Kpi kpi)
     {

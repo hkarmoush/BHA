@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-
 [ApiController]
 [Route("api/[controller]")]
 public class KpiController : ControllerBase
@@ -21,6 +20,12 @@ public class KpiController : ControllerBase
         if (string.IsNullOrEmpty(roleClaim))
         {
             return Unauthorized();
+        }
+
+        if (roleClaim == Role.SuperAdmin.ToString())
+        {
+            var allKpis = await _kpiService.GetAllKpisAsync();
+            return Ok(allKpis);
         }
 
         if (!Enum.TryParse(roleClaim, out Role userRole))

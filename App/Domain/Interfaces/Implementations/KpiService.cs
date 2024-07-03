@@ -46,6 +46,30 @@ public class KpiService : IKpiService
         });
     }
 
+    public async Task<IEnumerable<KpiDto>> GetAllKpisAsync()
+    {
+        var kpis = await _kpiRepository.GetAllKpisAsync();
+
+        foreach (var kpi in kpis)
+        {
+            var salesRecords = await _salesRecordRepository.GetSalesRecordsAsync();
+            var financialRecords = await _financialRecordRepository.GetFinancialRecordsAsync();
+            var hrRecords = await _hrRecordRepository.GetHRRecordsAsync();
+
+            CalculateSalesKpis(kpi, salesRecords);
+            CalculateFinancialKpis(kpi, financialRecords);
+            CalculateHRKpis(kpi, hrRecords);
+        }
+
+        return kpis.Select(k => new KpiDto
+        {
+            Id = k.Id,
+            Name = k.Name,
+            Description = k.Description,
+            Value = k.Value
+        });
+    }
+
     private void CalculateSalesKpis(Kpi kpi, IEnumerable<SalesRecord> salesRecords)
     {
         if (kpi.Name == "Total Sales")
