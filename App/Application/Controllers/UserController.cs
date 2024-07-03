@@ -29,14 +29,6 @@ public class UserController : ControllerBase
             return NotFound();
         }
 
-        var userDto = new UserDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Email = user.Email,
-            Role = user.Role.ToString()
-        };
-
-        return Ok(userDto);
+        return Ok(user);
     }
 }

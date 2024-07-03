@@ -7,8 +7,9 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<User> GetUserByIdAsync(Guid userId)
+    public async Task<UserDto> GetUserByIdAsync(Guid userId)
     {
-        return await _userRepository.GetUserByIdAsync(userId);
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        return user != null ? UserMapper.ToDto(user) : null;
     }
 }

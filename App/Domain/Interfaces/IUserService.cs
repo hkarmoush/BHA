@@ -1,4 +1,4 @@
 public interface IUserService
 {
-    Task<User> GetUserByIdAsync(Guid userId);
+    Task<UserDto> GetUserByIdAsync(Guid userId);
 }
