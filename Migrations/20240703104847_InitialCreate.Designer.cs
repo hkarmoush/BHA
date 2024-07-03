@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BHA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240703101317_InitialCreate")]
+    [Migration("20240703104847_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -50,6 +50,30 @@ namespace BHA.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Kpis");
+                });
+
+            modelBuilder.Entity("SalesRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Product")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SalesRecords");
                 });
 
             modelBuilder.Entity("User", b =>
