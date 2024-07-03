@@ -6,6 +6,8 @@ namespace Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Kpi> Kpis { get; set; }
         public DbSet<SalesRecord> SalesRecords { get; set; }
+        public DbSet<FinancialRecord> FinancialRecords { get; set; }
+        public DbSet<HRRecord> HRRecords { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -20,8 +22,10 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Kpi>().HasKey(k => k.Id);
             modelBuilder.Entity<Kpi>().Property(k => k.Role).HasConversion<string>();
 
-            // Sales Record
+            // Records
             modelBuilder.Entity<SalesRecord>().HasKey(sr => sr.Id);
+            modelBuilder.Entity<FinancialRecord>().HasKey(fr => fr.Id);
+            modelBuilder.Entity<HRRecord>().HasKey(hr => hr.Id);
         }
     }
 }

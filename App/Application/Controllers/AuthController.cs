@@ -1,4 +1,3 @@
-// Presentation/Controllers/AuthController.cs
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

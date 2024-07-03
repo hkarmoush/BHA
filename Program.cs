@@ -18,6 +18,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IKpiRepository, KpiRepository>();
 builder.Services.AddScoped<IKpiService, KpiService>();
 builder.Services.AddScoped<ISalesRecordRepository, SalesRecordRepository>();
+builder.Services.AddScoped<IFinancialRecordRepository, FinancialRecordRepository>();
+builder.Services.AddScoped<IHRRecordRepository, HRRecordRepository>();
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 builder.Services.AddAuthentication(options =>

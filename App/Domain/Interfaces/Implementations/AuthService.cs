@@ -76,7 +76,7 @@ namespace Application.Services
                 Email = request.Email,
                 PasswordHash = HashPassword(request.Password),
                 // Role = request.Role.ToString(),
-                Role = Role.CFO,
+                Role = Role.SuperAdmin,
             };
             user.AccessToken = GenerateJwtToken(user);
             user.RefreshToken = GenerateRefreshToken();
