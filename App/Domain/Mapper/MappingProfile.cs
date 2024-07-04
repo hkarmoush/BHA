@@ -5,5 +5,6 @@ public class MappingProfile : Profile
     {
         CreateMap<Customer, CustomerDto>().ReverseMap();
         CreateMap<Employee, EmployeeDto>().ReverseMap();
+        CreateMap<CustomerRecord, CustomerRecordDto>().ReverseMap();
     }
 }
