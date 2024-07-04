@@ -30,6 +30,21 @@ public static class DbInitializer
             SeedKpis(context);
         }
 
+        // Check if Customers have already been seeded
+        if (!context.Customers.Any())
+        {
+            SeedCustomers(context);
+        }
+
+        // Check if CustomerRecords have already been seeded
+        if (!context.CustomerRecords.Any())
+        {
+            SeedCustomerRecords(context);
+        }
+        if (!context.Users.Any(u => u.Role == Role.SuperAdmin))
+        {
+            SeedSuperAdmin(context);
+        }
         context.SaveChanges();
     }
 
@@ -137,5 +152,68 @@ public static class DbInitializer
         {
             context.Kpis.Add(kpi);
         }
+    }
+
+    private static void SeedCustomers(AppDbContext context)
+    {
+        var customers = new[]
+        {
+            new Customer { Id = Guid.NewGuid(), Name = "Customer A", Email = "customerA@example.com", AcquisitionCost = 100, CustomerSatisfactionScore = 85, CustomerLifetimeValue = 5000, NetPromoterScore = 9 },
+            new Customer { Id = Guid.NewGuid(), Name = "Customer B", Email = "customerB@example.com", AcquisitionCost = 150, CustomerSatisfactionScore = 88, CustomerLifetimeValue = 7000, NetPromoterScore = 8 },
+            new Customer { Id = Guid.NewGuid(), Name = "Customer C", Email = "customerC@example.com", AcquisitionCost = 200, CustomerSatisfactionScore = 90, CustomerLifetimeValue = 9000, NetPromoterScore = 10 },
+        };
+
+        context.Customers.AddRange(customers);
+    }
+
+    private static void SeedCustomerRecords(AppDbContext context)
+    {
+        var random = new Random();
+        var customerRecords = new List<CustomerRecord>();
+        var customerIds = context.Customers.Select(c => c.Id).ToList();
+
+        for (int year = 2023; year <= 2024; year++)
+        {
+            for (int month = 1; month <= 12; month++)
+            {
+                foreach (var customerId in customerIds)
+                {
+                    customerRecords.Add(new CustomerRecord
+                    {
+                        Id = Guid.NewGuid(),
+                        Date = new DateTime(year, month, 1),
+                        // CustomerId = customerId,
+                        CustomerSatisfactionScore = random.Next(60, 100),
+                        IsRetained = random.Next(0, 2) == 1,
+                        AcquisitionCost = random.Next(100, 200),
+                        IsNewCustomer = random.Next(0, 2) == 1,
+                        CustomerLifetimeValue = random.Next(5000, 10000),
+                        CustomerProfit = random.Next(4000, 9000),
+                        CustomerRevenue = random.Next(5000, 10000),
+                        NetPromoterScore = random.Next(0, 10),
+                        IsLost = random.Next(0, 2) == 1,
+                        CustomerEffortScore = random.Next(0, 5)
+                    });
+                }
+            }
+        }
+
+        context.CustomerRecords.AddRange(customerRecords);
+    }
+
+    private static void SeedSuperAdmin(AppDbContext context)
+    {
+        var superAdmin = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "Super Admin",
+            Email = "superadmin@example.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Apple@123123"),
+            Role = Role.SuperAdmin,
+            AccessToken = string.Empty,
+            RefreshToken = string.Empty
+        };
+
+        context.Users.Add(superAdmin);
     }
 }

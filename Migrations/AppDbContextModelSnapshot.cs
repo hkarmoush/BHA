@@ -28,9 +28,14 @@ namespace BHA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("AcquisitionCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerLifetimeValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerSatisfactionScore")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -40,13 +45,56 @@ namespace BHA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NetPromoterScore")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customer");
+                });
+
+            modelBuilder.Entity("CustomerRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AcquisitionCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerEffortScore")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerLifetimeValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerProfit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerRevenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CustomerSatisfactionScore")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsLost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNewCustomer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRetained")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NetPromoterScore")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerRecords");
                 });
 
             modelBuilder.Entity("Employee", b =>

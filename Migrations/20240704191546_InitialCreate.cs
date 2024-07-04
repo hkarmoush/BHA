@@ -12,18 +12,42 @@ namespace BHA.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Customer",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AcquisitionCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CustomerSatisfactionScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CustomerLifetimeValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NetPromoterScore = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerRecords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CustomerSatisfactionScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsRetained = table.Column<bool>(type: "bit", nullable: false),
+                    AcquisitionCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsNewCustomer = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerLifetimeValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CustomerProfit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CustomerRevenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    NetPromoterScore = table.Column<int>(type: "int", nullable: false),
+                    IsLost = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerEffortScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerRecords", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,7 +163,10 @@ namespace BHA.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "CustomerRecords");
 
             migrationBuilder.DropTable(
                 name: "Employees");

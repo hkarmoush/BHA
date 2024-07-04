@@ -10,6 +10,8 @@ namespace Infrastructure.Data
         public DbSet<HRRecord> HRRecords { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Customer> customers { get; set; }
+        public DbSet<CustomerRecord> CustomerRecords { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -30,8 +32,11 @@ namespace Infrastructure.Data
             modelBuilder.Entity<HRRecord>().HasKey(hr => hr.Id);
 
             // Historicals
-            modelBuilder.Entity<Customer>().HasKey(c => c.Id);
             modelBuilder.Entity<Employee>().HasKey(e => e.Id);
+
+            // Customer
+            modelBuilder.Entity<Customer>().HasKey(c => c.Id);
+            modelBuilder.Entity<CustomerRecord>().HasKey(cr => cr.Id);
         }
     }
 }
