@@ -56,10 +56,9 @@ namespace BHA.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Department = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateHired = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    HireDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,7 +103,11 @@ namespace BHA.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SatisfactionScore = table.Column<int>(type: "int", nullable: false)
+                    SatisfactionScore = table.Column<int>(type: "int", nullable: false),
+                    TrainingHours = table.Column<int>(type: "int", nullable: false),
+                    AbsenteeismDays = table.Column<int>(type: "int", nullable: false),
+                    ProductivityScore = table.Column<int>(type: "int", nullable: false),
+                    IsDiverse = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

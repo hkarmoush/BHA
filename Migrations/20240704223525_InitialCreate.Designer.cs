@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BHA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240704191546_InitialCreate")]
+    [Migration("20240704223525_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -106,12 +106,12 @@ namespace BHA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateHired")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("Department")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,9 +120,6 @@ namespace BHA.Migrations
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -203,6 +200,9 @@ namespace BHA.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AbsenteeismDays")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -213,7 +213,16 @@ namespace BHA.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDiverse")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductivityScore")
+                        .HasColumnType("int");
+
                     b.Property<int>("SatisfactionScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingHours")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

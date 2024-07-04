@@ -45,6 +45,14 @@ public static class DbInitializer
         {
             SeedSuperAdmin(context);
         }
+        if (!context.Employees.Any())
+        {
+            SeedEmployees(context);
+        }
+        if (!context.HRRecords.Any())
+        {
+            SeedHRRecords(context);
+        }
         context.SaveChanges();
     }
 
@@ -106,23 +114,50 @@ public static class DbInitializer
             context.FinancialRecords.Add(record);
         }
     }
+    private static void SeedEmployees(AppDbContext context)
+    {
+        var employees = new[]
+        {
+            new Employee { Id = Guid.NewGuid(), Name = "John Doe", Department = "HR", Position = "HR Manager", HireDate = new DateTime(2023, 1, 1) },
+            new Employee { Id = Guid.NewGuid(), Name = "Jane Smith", Department = "Sales", Position = "Sales Director", HireDate = new DateTime(2023, 2, 1) },
+            new Employee { Id = Guid.NewGuid(), Name = "Alice Johnson", Department = "Finance", Position = "Financial Officer", HireDate = new DateTime(2023, 3, 1) },
+            // Add more sample employees as needed
+        };
+
+        context.Employees.AddRange(employees);
+        context.SaveChanges();
+    }
 
     private static void SeedHRRecords(AppDbContext context)
     {
-        var hrRecords = new[]
-        {
-            new HRRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 1, 1), EmployeeId = Guid.NewGuid(), EventType = "Hire", SatisfactionScore = 85 },
-            new HRRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 1, 15), EmployeeId = Guid.NewGuid(), EventType = "Promotion", SatisfactionScore = 90 },
-            new HRRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 2, 1), EmployeeId = Guid.NewGuid(), EventType = "Resignation", SatisfactionScore = 60 },
-            new HRRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 2, 15), EmployeeId = Guid.NewGuid(), EventType = "Hire", SatisfactionScore = 80 },
-            new HRRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 3, 1), EmployeeId = Guid.NewGuid(), EventType = "Termination", SatisfactionScore = 70 },
-            // Add more sample data as needed
-        };
+        var employees = context.Employees.ToList();
+        var random = new Random();
+        var hrRecords = new List<HRRecord>();
 
-        foreach (var record in hrRecords)
+        for (int year = 2023; year <= 2024; year++)
         {
-            context.HRRecords.Add(record);
+            for (int month = 1; month <= 12; month++)
+            {
+                // foreach (var employee in employees)
+                // {
+                hrRecords.Add(new HRRecord
+                {
+                    Id = Guid.NewGuid(),
+                    Date = new DateTime(year, month, 1),
+                    EmployeeId = Guid.NewGuid(),
+                    EventType = "Hire",
+                    SatisfactionScore = random.Next(60, 100),
+                    TrainingHours = random.Next(5, 25),
+                    AbsenteeismDays = random.Next(0, 5),
+                    ProductivityScore = random.Next(5, 10),
+                    IsDiverse = random.Next(0, 2) == 1
+                });
+                // }
+            }
         }
+
+        context.HRRecords.AddRange(hrRecords);
+        context.SaveChanges();
     }
 
     private static void SeedKpis(AppDbContext context)

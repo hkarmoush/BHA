@@ -1,4 +1,4 @@
-public class HRRecord
+public class HRRecordDto
 {
     public Guid Id { get; set; }
     public DateTime Date { get; set; }

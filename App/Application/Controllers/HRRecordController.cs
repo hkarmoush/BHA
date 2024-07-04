@@ -1,28 +1,66 @@
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
 public class HRRecordController : ControllerBase
 {
-    private readonly IHRRecordRepository _hrRecordRepository;
+    private readonly IHRRecordService _hrRecordService;
 
-    public HRRecordController(IHRRecordRepository hrRecordRepository)
+    public HRRecordController(IHRRecordService hrRecordService)
     {
-        _hrRecordRepository = hrRecordRepository;
+        _hrRecordService = hrRecordService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<HRRecord>>> GetHRRecords()
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<HRRecordDto>>> GetHRRecords()
     {
-        var hrRecords = await _hrRecordRepository.GetHRRecordsAsync();
+        var hrRecords = await _hrRecordService.GetHRRecordsAsync();
         return Ok(hrRecords);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> AddHRRecord(HRRecord hrRecord)
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<ActionResult<HRRecordDto>> GetHRRecordById(Guid id)
     {
-        await _hrRecordRepository.AddHRRecordAsync(hrRecord);
+        var hrRecord = await _hrRecordService.GetHRRecordByIdAsync(id);
+        if (hrRecord == null)
+        {
+            return NotFound();
+        }
+        return Ok(hrRecord);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult> AddHRRecord(HRRecordDto hrRecordDto)
+    {
+        await _hrRecordService.AddHRRecordAsync(hrRecordDto);
+        return Ok();
+    }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<ActionResult> UpdateHRRecord(Guid id, HRRecordDto hrRecordDto)
+    {
+        if (id != hrRecordDto.Id)
+        {
+            return BadRequest();
+        }
+
+        await _hrRecordService.UpdateHRRecordAsync(hrRecordDto);
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<ActionResult> DeleteHRRecord(Guid id)
+    {
+        await _hrRecordService.DeleteHRRecordAsync(id);
         return Ok();
     }
 }
