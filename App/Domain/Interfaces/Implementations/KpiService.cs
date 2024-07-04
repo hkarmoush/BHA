@@ -1,245 +1,319 @@
-public class KpiService : IKpiService
+public class FinancialKpiService : IFinancialKpiService
 {
-    private readonly IKpiRepository _kpiRepository;
-    private readonly ISalesRecordRepository _salesRecordRepository;
     private readonly IFinancialRecordRepository _financialRecordRepository;
-    private readonly IHRRecordRepository _hrRecordRepository;
 
-    public KpiService(IKpiRepository kpiRepository, ISalesRecordRepository salesRecordRepository,
-                      IFinancialRecordRepository financialRecordRepository, IHRRecordRepository hrRecordRepository)
+    public FinancialKpiService(IFinancialRecordRepository financialRecordRepository)
     {
-        _kpiRepository = kpiRepository;
-        _salesRecordRepository = salesRecordRepository;
         _financialRecordRepository = financialRecordRepository;
-        _hrRecordRepository = hrRecordRepository;
     }
 
-    public async Task<IEnumerable<KpiDto>> GetKpisForUserRoleAsync(Role role)
+    public async Task<decimal> CalculateNetIncomeAsync()
     {
-        var kpis = await _kpiRepository.GetKpisByRoleAsync(role);
-
-        foreach (var kpi in kpis)
-        {
-            if (role == Role.SalesDirector)
-            {
-                var salesRecords = await _salesRecordRepository.GetSalesRecordsAsync();
-                CalculateSalesKpis(kpi, salesRecords);
-            }
-            else if (role == Role.FinancialOfficer || role == Role.CFO)
-            {
-                var financialRecords = await _financialRecordRepository.GetFinancialRecordsAsync();
-                CalculateFinancialKpis(kpi, financialRecords);
-            }
-            else if (role == Role.HR)
-            {
-                var hrRecords = await _hrRecordRepository.GetHRRecordsAsync();
-                CalculateHRKpis(kpi, hrRecords);
-            }
-        }
-
-        return kpis.Select(k => new KpiDto
-        {
-            Id = k.Id,
-            Name = k.Name,
-            Description = k.Description,
-            Value = k.Value
-        });
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.NetIncome);
     }
 
-    public async Task<IEnumerable<KpiDto>> GetAllKpisAsync()
+    public async Task<decimal> CalculateRevenuePerUserAsync(int totalUsers)
     {
-        var kpis = await _kpiRepository.GetAllKpisAsync();
-
-        foreach (var kpi in kpis)
-        {
-            var salesRecords = await _salesRecordRepository.GetSalesRecordsAsync();
-            var financialRecords = await _financialRecordRepository.GetFinancialRecordsAsync();
-            var hrRecords = await _hrRecordRepository.GetHRRecordsAsync();
-
-            CalculateSalesKpis(kpi, salesRecords);
-            CalculateFinancialKpis(kpi, financialRecords);
-            CalculateHRKpis(kpi, hrRecords);
-        }
-
-        return kpis.Select(k => new KpiDto
-        {
-            Id = k.Id,
-            Name = k.Name,
-            Description = k.Description,
-            Value = k.Value
-        });
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalUsers == 0 ? 0 : totalRevenue / totalUsers;
     }
 
-    private void CalculateSalesKpis(Kpi kpi, IEnumerable<SalesRecord> salesRecords)
+    public async Task<decimal> CalculateROCEAsync()
     {
-        if (kpi.Name == "Total Sales")
-        {
-            kpi.Value = salesRecords.Sum(sr => sr.Amount).ToString("C");
-        }
-        else if (kpi.Name == "Sales Growth")
-        {
-            kpi.Value = CalculateSalesGrowth(salesRecords).ToString("P");
-        }
-        else if (kpi.Name == "Customer Acquisition Cost (CAC)")
-        {
-            kpi.Value = CalculateCustomerAcquisitionCost(salesRecords).ToString("C");
-        }
-        else if (kpi.Name == "Average Deal Size")
-        {
-            kpi.Value = CalculateAverageDealSize(salesRecords).ToString("C");
-        }
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalOperatingIncome = records.Sum(fr => fr.OperatingIncome);
+        var totalCapitalEmployed = records.Sum(fr => fr.CapitalEmployed);
+        return totalCapitalEmployed == 0 ? 0 : totalOperatingIncome / totalCapitalEmployed;
     }
 
-    private decimal CalculateSalesGrowth(IEnumerable<SalesRecord> salesRecords)
+    public async Task<decimal> CalculateHumanCapitalValueAddedAsync(int totalEmployees)
     {
-        var groupedByMonth = salesRecords
-            .GroupBy(sr => new { sr.Date.Year, sr.Date.Month })
-            .Select(g => new
-            {
-                Year = g.Key.Year,
-                Month = g.Key.Month,
-                TotalSales = g.Sum(sr => sr.Amount)
-            })
-            .OrderBy(g => g.Year).ThenBy(g => g.Month)
-            .ToList();
-
-        if (groupedByMonth.Count < 2)
-        {
-            return 0;
-        }
-
-        var lastMonthSales = groupedByMonth[^1].TotalSales;
-        var previousMonthSales = groupedByMonth[^2].TotalSales;
-
-        return previousMonthSales == 0 ? 0 : (lastMonthSales - previousMonthSales) / previousMonthSales;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        var totalOperatingExpenses = records.Sum(fr => fr.OperatingExpenses);
+        return totalEmployees == 0 ? 0 : (totalRevenue - totalOperatingExpenses) / totalEmployees;
     }
 
-    private decimal CalculateCustomerAcquisitionCost(IEnumerable<SalesRecord> salesRecords)
+    public async Task<decimal> CalculateSalesAsync()
     {
-        var totalSales = salesRecords.Sum(sr => sr.Amount);
-        var numberOfCustomers = salesRecords.Select(sr => sr.CustomerId).Distinct().Count();
-        var totalCost = 5000; // Replace this with actual cost data
-
-        return numberOfCustomers == 0 ? 0 : totalCost / numberOfCustomers;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.Revenue);
     }
 
-    private decimal CalculateAverageDealSize(IEnumerable<SalesRecord> salesRecords)
+    public async Task<decimal> CalculatePercentageRevenuePerMajorCustomerAsync(decimal majorCustomerRevenue)
     {
-        var numberOfDeals = salesRecords.Count();
-        var totalSales = salesRecords.Sum(sr => sr.Amount);
-
-        return numberOfDeals == 0 ? 0 : totalSales / numberOfDeals;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : (majorCustomerRevenue / totalRevenue) * 100;
     }
 
-    private void CalculateFinancialKpis(Kpi kpi, IEnumerable<FinancialRecord> financialRecords)
+    public async Task<decimal> CalculateROAAsync()
     {
-        if (kpi.Name == "Net Profit Margin")
-        {
-            kpi.Value = CalculateNetProfitMargin(financialRecords).ToString("P");
-        }
-        else if (kpi.Name == "Gross Profit Margin")
-        {
-            kpi.Value = CalculateGrossProfitMargin(financialRecords).ToString("P");
-        }
-        else if (kpi.Name == "Operating Cash Flow")
-        {
-            kpi.Value = CalculateOperatingCashFlow(financialRecords).ToString("C");
-        }
-        else if (kpi.Name == "Return on Assets (ROA)")
-        {
-            kpi.Value = CalculateReturnOnAssets(financialRecords).ToString("P");
-        }
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalNetIncome = records.Sum(fr => fr.NetIncome);
+        var totalAssets = records.Sum(fr => fr.TotalAssets);
+        return totalAssets == 0 ? 0 : totalNetIncome / totalAssets;
     }
 
-    private decimal CalculateNetProfitMargin(IEnumerable<FinancialRecord> financialRecords)
+    public async Task<decimal> CalculateRevenuePerEmployeeAsync(int totalEmployees)
     {
-        var totalRevenue = financialRecords.Sum(fr => fr.Revenue);
-        var totalExpense = financialRecords.Sum(fr => fr.Expense);
-
-        return totalRevenue == 0 ? 0 : (totalRevenue - totalExpense) / totalRevenue;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalEmployees == 0 ? 0 : totalRevenue / totalEmployees;
     }
 
-    private decimal CalculateGrossProfitMargin(IEnumerable<FinancialRecord> financialRecords)
+    public async Task<decimal> CalculateNetEarningsAsync()
     {
-        var totalRevenue = financialRecords.Sum(fr => fr.Revenue);
-        var totalExpense = financialRecords.Sum(fr => fr.Expense); // This should be cost of goods sold (COGS)
-
-        return totalRevenue == 0 ? 0 : (totalRevenue - totalExpense) / totalRevenue;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.NetIncome);
     }
 
-    private decimal CalculateOperatingCashFlow(IEnumerable<FinancialRecord> financialRecords)
+    public async Task<decimal> CalculateSalesPerChannelAsync(Dictionary<string, decimal> channelSales)
     {
-        return financialRecords.Sum(fr => fr.Revenue - fr.Expense);
+        return channelSales.Sum(cs => cs.Value);
     }
 
-    private decimal CalculateReturnOnAssets(IEnumerable<FinancialRecord> financialRecords)
+    public async Task<decimal> CalculateDebtToEquityRatioAsync()
     {
-        var totalRevenue = financialRecords.Sum(fr => fr.Revenue);
-        var totalAssets = 50000; // Replace this with actual assets data
-
-        return totalAssets == 0 ? 0 : totalRevenue / totalAssets;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalLiabilities = records.Sum(fr => fr.TotalLiabilities);
+        var totalEquity = records.Sum(fr => fr.TotalEquity);
+        return totalEquity == 0 ? 0 : totalLiabilities / totalEquity;
     }
 
-    private void CalculateHRKpis(Kpi kpi, IEnumerable<HRRecord> hrRecords)
+    public async Task<decimal> CalculateEnergyConsumptionAsync()
     {
-        if (kpi.Name == "Employee Turnover Rate")
-        {
-            kpi.Value = CalculateEmployeeTurnoverRate(hrRecords).ToString("P");
-        }
-        else if (kpi.Name == "Employee Satisfaction Index")
-        {
-            kpi.Value = CalculateEmployeeSatisfactionIndex(hrRecords).ToString();
-        }
-        else if (kpi.Name == "Time to Hire")
-        {
-            kpi.Value = CalculateTimeToHire(hrRecords).ToString("N0") + " days";
-        }
-        else if (kpi.Name == "Diversity and Inclusion Metrics")
-        {
-            kpi.Value = CalculateDiversityAndInclusionMetrics(hrRecords).ToString("P");
-        }
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.EnergyConsumption);
     }
 
-    private decimal CalculateEmployeeTurnoverRate(IEnumerable<HRRecord> hrRecords)
+    public async Task<decimal> CalculateEBITAsync()
     {
-        var totalEmployees = hrRecords.Select(hr => hr.EmployeeId).Distinct().Count();
-        var employeesLeft = hrRecords.Count(hr => hr.EventType == "Resignation" || hr.EventType == "Termination");
-
-        return totalEmployees == 0 ? 0 : (decimal)employeesLeft / totalEmployees;
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.OperatingIncome);
     }
 
-    private decimal CalculateEmployeeSatisfactionIndex(IEnumerable<HRRecord> hrRecords)
+    public async Task<decimal> CalculateQuotationConversionRateAsync(int totalQuotations, int successfulQuotations)
     {
-        var totalEvents = hrRecords.Count();
-        var totalSatisfaction = hrRecords.Sum(hr => hr.SatisfactionScore);
-
-        return totalEvents == 0 ? 0 : (decimal)totalSatisfaction / totalEvents;
+        return totalQuotations == 0 ? 0 : (decimal)successfulQuotations / totalQuotations * 100;
     }
 
-    private decimal CalculateTimeToHire(IEnumerable<HRRecord> hrRecords)
+    public async Task<decimal> CalculateCashConversionCycleAsync()
     {
-        var hireEvents = hrRecords.Where(hr => hr.EventType == "Hire").ToList();
-
-        if (hireEvents.Count < 2)
-        {
-            return 0;
-        }
-
-        var totalTime = 0;
-        for (int i = 1; i < hireEvents.Count; i++)
-        {
-            totalTime += (hireEvents[i].Date - hireEvents[i - 1].Date).Days;
-        }
-
-        return (decimal)totalTime / (hireEvents.Count - 1);
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var inventoryDays = records.Sum(fr => fr.Inventory) / records.Sum(fr => fr.CostOfGoodsSold) * 365;
+        var receivableDays = records.Sum(fr => fr.AccountsReceivable) / records.Sum(fr => fr.Revenue) * 365;
+        var payableDays = records.Sum(fr => fr.AccountsPayable) / records.Sum(fr => fr.CostOfGoodsSold) * 365;
+        return inventoryDays + receivableDays - payableDays;
     }
 
-    private decimal CalculateDiversityAndInclusionMetrics(IEnumerable<HRRecord> hrRecords)
+    public async Task<decimal> CalculateSavingLevelsAsync()
     {
-        // Example calculation: Percentage of diverse hires
-        var totalHires = hrRecords.Count(hr => hr.EventType == "Hire");
-        var diverseHires = hrRecords.Count(hr => hr.EventType == "Hire" && hr.SatisfactionScore >= 80); // Assuming satisfaction score indicates diversity
+        // This KPI would require specific data on savings due to conservation and improvement efforts
+        throw new NotImplementedException();
+    }
 
-        return totalHires == 0 ? 0 : (decimal)diverseHires / totalHires;
+    public async Task<decimal> CalculateEBITDAAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalOperatingIncome = records.Sum(fr => fr.OperatingIncome);
+        var totalDepreciation = records.Sum(fr => fr.Depreciation);
+        var totalAmortization = records.Sum(fr => fr.Amortization);
+        return totalOperatingIncome + totalDepreciation + totalAmortization;
+    }
+
+    public async Task<decimal> CalculateUpsellingSuccessRateAsync(int totalUpsells, int successfulUpsells)
+    {
+        return totalUpsells == 0 ? 0 : (decimal)successfulUpsells / totalUpsells * 100;
+    }
+
+    public async Task<decimal> CalculateWorkingCapitalRatioAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalCurrentAssets = records.Sum(fr => fr.Cash + fr.AccountsReceivable + fr.Inventory);
+        var totalCurrentLiabilities = records.Sum(fr => fr.AccountsPayable);
+        return totalCurrentLiabilities == 0 ? 0 : totalCurrentAssets / totalCurrentLiabilities;
+    }
+
+    public async Task<decimal> CalculateRevenueAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.Revenue);
+    }
+
+    public async Task<decimal> CalculateRiskLikelihoodVsConsequenceAsync()
+    {
+        // This KPI requires specific risk assessment data
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateReturnOnInvestmentAsync(decimal investmentCost, decimal returnAmount)
+    {
+        return investmentCost == 0 ? 0 : (returnAmount - investmentCost) / investmentCost * 100;
+    }
+
+    public async Task<decimal> CalculateCrossSellingSuccessRateAsync(int totalCrossSells, int successfulCrossSells)
+    {
+        return totalCrossSells == 0 ? 0 : (decimal)successfulCrossSells / totalCrossSells * 100;
+    }
+
+    public async Task<decimal> CalculateOperatingExpenseRatioAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalOperatingExpenses = records.Sum(fr => fr.OperatingExpenses);
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalOperatingExpenses / totalRevenue;
+    }
+
+    public async Task<decimal> CalculateRevenueGrowthRateAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var currentYearRevenue = records.Where(fr => fr.Date.Year == DateTime.Now.Year).Sum(fr => fr.Revenue);
+        var previousYearRevenue = records.Where(fr => fr.Date.Year == DateTime.Now.Year - 1).Sum(fr => fr.Revenue);
+        return previousYearRevenue == 0 ? 0 : (currentYearRevenue - previousYearRevenue) / previousYearRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateRiskAppetiteVsExposureAsync()
+    {
+        // This KPI requires specific risk assessment data
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateEVAAsync()
+    {
+        // Economic Value Added (EVA) requires specific calculations based on NOPAT and WACC
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateCostToServeAsync()
+    {
+        // This KPI requires specific data on costs associated with serving customers
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateCAPEXToSalesRatioAsync()
+    {
+        // This KPI requires specific CAPEX data
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateNetProfitAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        return records.Sum(fr => fr.NetIncome);
+    }
+
+    public async Task<decimal> CalculateITCostsAsPercentageOfRevenueAsync(decimal totalITCosts)
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalITCosts / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateTurnoverAsync()
+    {
+        // This KPI requires specific turnover data
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateAcquisitionRetentionSpendingRatioAsync()
+    {
+        // This KPI requires specific data on acquisition and retention spending
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculatePERatioAsync(decimal sharePrice, decimal earningsPerShare)
+    {
+        return earningsPerShare == 0 ? 0 : sharePrice / earningsPerShare;
+    }
+
+    public async Task<decimal> CalculateNetProfitMarginAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalNetIncome = records.Sum(fr => fr.NetIncome);
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalNetIncome / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateITProjectCostVarianceAsync()
+    {
+        // This KPI requires specific data on IT project costs and budgeted costs
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateNetIncomeMarginAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalNetIncome = records.Sum(fr => fr.NetIncome);
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalNetIncome / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateCostAvoidanceScoreAsync()
+    {
+        // This KPI requires specific data on cost avoidance initiatives
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateCustomerProfitabilityAsync()
+    {
+        // This KPI requires specific data on customer revenue and costs
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateGrossProfitMarginAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        var totalCOGS = records.Sum(fr => fr.CostOfGoodsSold);
+        return totalRevenue == 0 ? 0 : (totalRevenue - totalCOGS) / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateSalesVolumeProjectionAsync()
+    {
+        // This KPI requires specific data on sales volume projections
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateReturnOnSalesAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalNetIncome = records.Sum(fr => fr.NetIncome);
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalNetIncome / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateCustomerLifetimeValueAsync()
+    {
+        // This KPI requires specific data on customer lifetime revenue and costs
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateTotalShareholderReturnAsync(decimal sharePrice, decimal dividend)
+    {
+        // This KPI requires specific data on share price and dividend
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateDirectProductProfitabilityAsync()
+    {
+        // This KPI requires specific data on product costs and revenue
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> CalculateOperatingProfitMarginAsync()
+    {
+        var records = await _financialRecordRepository.GetFinancialRecordsAsync();
+        var totalOperatingIncome = records.Sum(fr => fr.OperatingIncome);
+        var totalRevenue = records.Sum(fr => fr.Revenue);
+        return totalRevenue == 0 ? 0 : totalOperatingIncome / totalRevenue * 100;
+    }
+
+    public async Task<decimal> CalculateReturnOnInnovationInvestmentAsync()
+    {
+        // This KPI requires specific data on innovation investment and returns
+        throw new NotImplementedException();
     }
 }

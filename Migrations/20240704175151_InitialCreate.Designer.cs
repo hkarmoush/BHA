@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BHA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240703110615_InitialCreate")]
+    [Migration("20240704175151_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,19 +25,123 @@ namespace BHA.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateHired")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("FinancialRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("AccountsPayable")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("AccountsReceivable")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Amortization")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CapitalEmployed")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Cash")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CostOfGoodsSold")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Expense")
+                    b.Property<decimal>("Depreciation")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("EnergyConsumption")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InterestExpense")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Inventory")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("NetIncome")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OperatingExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OperatingIncome")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Revenue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxExpense")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAssets")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalEquity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalLiabilities")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");

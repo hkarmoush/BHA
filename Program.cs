@@ -16,10 +16,15 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IKpiRepository, KpiRepository>();
-builder.Services.AddScoped<IKpiService, KpiService>();
+builder.Services.AddScoped<IFinancialKpiService, FinancialKpiService>();
 builder.Services.AddScoped<ISalesRecordRepository, SalesRecordRepository>();
 builder.Services.AddScoped<IFinancialRecordRepository, FinancialRecordRepository>();
 builder.Services.AddScoped<IHRRecordRepository, HRRecordRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 builder.Services.AddAuthentication(options =>

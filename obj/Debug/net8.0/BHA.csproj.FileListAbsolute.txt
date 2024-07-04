@@ -139,3 +139,4 @@
 /Users/hasanarmoush/Documents/GitHub/BHA/obj/Debug/net8.0/BHA.genruntimeconfig.cache
 /Users/hasanarmoush/Documents/GitHub/BHA/obj/Debug/net8.0/ref/BHA.dll
 /Users/hasanarmoush/Documents/GitHub/BHA/obj/Debug/net8.0/BHA.sourcelink.json
+/Users/hasanarmoush/Documents/GitHub/BHA/bin/Debug/net8.0/AutoMapper.dll

@@ -12,13 +12,60 @@ namespace BHA.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateHired = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Salary = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FinancialRecords",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Revenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Expense = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    NetIncome = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OperatingIncome = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CostOfGoodsSold = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OperatingExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalAssets = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalLiabilities = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalEquity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CapitalEmployed = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Depreciation = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amortization = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Cash = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Inventory = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccountsReceivable = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccountsPayable = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    InterestExpense = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TaxExpense = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EnergyConsumption = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,6 +138,12 @@ namespace BHA.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
+
             migrationBuilder.DropTable(
                 name: "FinancialRecords");
 

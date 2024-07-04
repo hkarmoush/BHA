@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "+qNZ+1gWNzo=",
+  "dgSpecHash": "fCo6aIYXG1w=",
   "success": true,
   "projectFilePath": "/Users/hasanarmoush/Documents/GitHub/BHA/BHA.csproj",
   "expectedPackageFiles": [
+    "/Users/hasanarmoush/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
     "/Users/hasanarmoush/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/Users/hasanarmoush/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
     "/Users/hasanarmoush/.nuget/packages/bcrypt/1.0.0/bcrypt.1.0.0.nupkg.sha512",

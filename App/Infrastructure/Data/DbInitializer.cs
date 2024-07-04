@@ -53,15 +53,38 @@ public static class DbInitializer
 
     private static void SeedFinancialRecords(AppDbContext context)
     {
-        var financialRecords = new[]
+        var random = new Random();
+        var financialRecords = new List<FinancialRecord>();
+
+        for (int year = 2023; year <= 2024; year++)
         {
-            new FinancialRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 1, 1), Revenue = 10000, Expense = 7000 },
-            new FinancialRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 1, 15), Revenue = 15000, Expense = 9000 },
-            new FinancialRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 2, 1), Revenue = 20000, Expense = 12000 },
-            new FinancialRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 2, 15), Revenue = 25000, Expense = 15000 },
-            new FinancialRecord { Id = Guid.NewGuid(), Date = new DateTime(2024, 3, 1), Revenue = 30000, Expense = 18000 },
-            // Add more sample data as needed
-        };
+            for (int month = 1; month <= 12; month++)
+            {
+                financialRecords.Add(new FinancialRecord
+                {
+                    Id = Guid.NewGuid(),
+                    Date = new DateTime(year, month, 1),
+                    Revenue = random.Next(80000, 150000),
+                    NetIncome = random.Next(10000, 30000),
+                    OperatingIncome = random.Next(15000, 35000),
+                    CostOfGoodsSold = random.Next(30000, 50000),
+                    OperatingExpenses = random.Next(10000, 20000),
+                    TotalAssets = random.Next(400000, 600000),
+                    TotalLiabilities = random.Next(150000, 300000),
+                    TotalEquity = random.Next(250000, 400000),
+                    CapitalEmployed = random.Next(300000, 450000),
+                    Depreciation = random.Next(4000, 7000),
+                    Amortization = random.Next(2000, 5000),
+                    Cash = random.Next(90000, 120000),
+                    Inventory = random.Next(15000, 30000),
+                    AccountsReceivable = random.Next(10000, 20000),
+                    AccountsPayable = random.Next(8000, 15000),
+                    InterestExpense = random.Next(1500, 2500),
+                    TaxExpense = random.Next(2500, 4000),
+                    EnergyConsumption = random.Next(4500, 6000)
+                });
+            }
+        }
 
         foreach (var record in financialRecords)
         {
