@@ -55,4 +55,26 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("default-login")]
+    public async Task<ActionResult<AuthResponseDto>> DefaultLogin()
+    {
+        var request = new AuthRequestDto
+        {
+            Email = "superadmin@example.com",
+            Password = "Apple@123123"
+        };
+
+        try
+        {
+            var accessToken = await _authService.AuthenticateAsync(request.Email, request.Password);
+            var refreshToken = await _authService.GenerateRefreshTokenAsync(request.Email);
+
+            return Ok(new AuthResponseDto { AccessToken = accessToken, RefreshToken = refreshToken });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+    }
+
 }
