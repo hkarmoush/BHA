@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
 public interface IFinancialKpiService
 {
     Task<KpiResultDto> CalculateNetIncomeAsync();
