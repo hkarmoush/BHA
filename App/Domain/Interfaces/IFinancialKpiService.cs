@@ -1,0 +1,53 @@
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+public interface IFinancialKpiService
+{
+    Task<KpiResultDto> CalculateNetIncomeAsync();
+    Task<KpiResultDto> CalculateRevenuePerUserAsync(int totalUsers);
+    Task<KpiResultDto> CalculateROCEAsync();
+    Task<KpiResultDto> CalculateHumanCapitalValueAddedAsync(int totalEmployees);
+    Task<KpiResultDto> CalculateSalesAsync();
+    Task<KpiResultDto> CalculatePercentageRevenuePerMajorCustomerAsync(decimal majorCustomerRevenue);
+    Task<KpiResultDto> CalculateROAAsync();
+    Task<KpiResultDto> CalculateRevenuePerEmployeeAsync(int totalEmployees);
+    Task<KpiResultDto> CalculateNetEarningsAsync();
+    Task<KpiResultDto> CalculateSalesPerChannelAsync(Dictionary<string, decimal> channelSales);
+    Task<KpiResultDto> CalculateDebtToEquityRatioAsync();
+    Task<KpiResultDto> CalculateEnergyConsumptionAsync();
+    Task<KpiResultDto> CalculateEBITAsync();
+    Task<KpiResultDto> CalculateQuotationConversionRateAsync(int totalQuotations, int successfulQuotations);
+    Task<KpiResultDto> CalculateCashConversionCycleAsync();
+    Task<KpiResultDto> CalculateSavingLevelsAsync();
+    Task<KpiResultDto> CalculateEBITDAAsync();
+    Task<KpiResultDto> CalculateUpsellingSuccessRateAsync(int totalUpsells, int successfulUpsells);
+    Task<KpiResultDto> CalculateWorkingCapitalRatioAsync();
+    Task<KpiResultDto> CalculateRevenueAsync();
+    Task<KpiResultDto> CalculateRiskLikelihoodVsConsequenceAsync();
+    Task<KpiResultDto> CalculateReturnOnInvestmentAsync(decimal investmentCost, decimal returnAmount);
+    Task<KpiResultDto> CalculateCrossSellingSuccessRateAsync(int totalCrossSells, int successfulCrossSells);
+    Task<KpiResultDto> CalculateOperatingExpenseRatioAsync();
+    Task<KpiResultDto> CalculateRevenueGrowthRateAsync();
+    Task<KpiResultDto> CalculateRiskAppetiteVsExposureAsync();
+    Task<KpiResultDto> CalculateEVAAsync();
+    Task<KpiResultDto> CalculateCostToServeAsync();
+    Task<KpiResultDto> CalculateCAPEXToSalesRatioAsync();
+    Task<KpiResultDto> CalculateNetProfitAsync();
+    Task<KpiResultDto> CalculateITCostsAsPercentageOfRevenueAsync(decimal totalITCosts);
+    Task<KpiResultDto> CalculateTurnoverAsync();
+    Task<KpiResultDto> CalculateAcquisitionRetentionSpendingRatioAsync();
+    Task<KpiResultDto> CalculatePERatioAsync(decimal sharePrice, decimal earningsPerShare);
+    Task<KpiResultDto> CalculateNetProfitMarginAsync();
+    Task<KpiResultDto> CalculateITProjectCostVarianceAsync();
+    Task<KpiResultDto> CalculateNetIncomeMarginAsync();
+    Task<KpiResultDto> CalculateCostAvoidanceScoreAsync();
+    Task<KpiResultDto> CalculateCustomerProfitabilityAsync();
+    Task<KpiResultDto> CalculateGrossProfitMarginAsync();
+    Task<KpiResultDto> CalculateSalesVolumeProjectionAsync();
+    Task<KpiResultDto> CalculateReturnOnSalesAsync();
+    Task<KpiResultDto> CalculateCustomerLifetimeValueAsync();
+    Task<KpiResultDto> CalculateTotalShareholderReturnAsync(decimal sharePrice, decimal dividend);
+    Task<KpiResultDto> CalculateDirectProductProfitabilityAsync();
+    Task<KpiResultDto> CalculateOperatingProfitMarginAsync();
+    Task<KpiResultDto> CalculateReturnOnInnovationInvestmentAsync();
+}

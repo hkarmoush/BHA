@@ -1,10 +1,10 @@
 public interface IHRKpiService
 {
-    Task<decimal> CalculateEmployeeTurnoverRateAsync();
-    Task<decimal> CalculateEmployeeSatisfactionIndexAsync();
-    Task<decimal> CalculateTimeToHireAsync();
-    Task<decimal> CalculateDiversityAndInclusionMetricsAsync();
-    Task<decimal> CalculateTrainingHoursPerEmployeeAsync();
-    Task<decimal> CalculateAbsenteeismRateAsync();
-    Task<decimal> CalculateEmployeeProductivityRateAsync();
+    Task<KpiResultDto> CalculateEmployeeTurnoverRateAsync();
+    Task<KpiResultDto> CalculateEmployeeSatisfactionIndexAsync();
+    Task<KpiResultDto> CalculateTimeToHireAsync();
+    Task<KpiResultDto> CalculateDiversityAndInclusionMetricsAsync();
+    Task<KpiResultDto> CalculateTrainingHoursPerEmployeeAsync();
+    Task<KpiResultDto> CalculateAbsenteeismRateAsync();
+    Task<KpiResultDto> CalculateEmployeeProductivityRateAsync();
 }

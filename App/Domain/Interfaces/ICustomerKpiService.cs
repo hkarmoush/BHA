@@ -1,11 +1,11 @@
 public interface ICustomerKpiService
 {
-    Task<decimal> CalculateCustomerSatisfactionAsync();
-    Task<decimal> CalculateCustomerRetentionRateAsync();
-    Task<decimal> CalculateCustomerAcquisitionCostAsync();
-    Task<decimal> CalculateCustomerLifetimeValueAsync();
-    Task<decimal> CalculateCustomerProfitabilityAsync();
-    Task<decimal> CalculateNetPromoterScoreAsync();
-    Task<decimal> CalculateCustomerTurnoverRateAsync();
-    Task<decimal> CalculateCustomerEffortScoreAsync();
+    Task<KpiResultDto> CalculateCustomerSatisfactionAsync();
+    Task<KpiResultDto> CalculateCustomerRetentionRateAsync();
+    Task<KpiResultDto> CalculateCustomerAcquisitionCostAsync();
+    Task<KpiResultDto> CalculateCustomerLifetimeValueAsync();
+    Task<KpiResultDto> CalculateCustomerProfitabilityAsync();
+    Task<KpiResultDto> CalculateNetPromoterScoreAsync();
+    Task<KpiResultDto> CalculateCustomerTurnoverRateAsync();
+    Task<KpiResultDto> CalculateCustomerEffortScoreAsync();
 }

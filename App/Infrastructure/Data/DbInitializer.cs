@@ -217,7 +217,7 @@ public static class DbInitializer
                     {
                         Id = Guid.NewGuid(),
                         Date = new DateTime(year, month, 1),
-                        // CustomerId = customerId,
+                        CustomerId = customerId,
                         CustomerSatisfactionScore = random.Next(60, 100),
                         IsRetained = random.Next(0, 2) == 1,
                         AcquisitionCost = random.Next(100, 200),

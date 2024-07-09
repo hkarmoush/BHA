@@ -33,6 +33,7 @@ namespace BHA.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerSatisfactionScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsRetained = table.Column<bool>(type: "bit", nullable: false),

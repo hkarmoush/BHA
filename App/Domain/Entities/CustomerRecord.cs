@@ -1,6 +1,7 @@
 public class CustomerRecord
 {
     public Guid Id { get; set; }
+    public Guid CustomerId { get; set; }
     public DateTime Date { get; set; }
     public decimal CustomerSatisfactionScore { get; set; }
     public bool IsRetained { get; set; }

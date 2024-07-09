@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BHA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240704223525_InitialCreate")]
+    [Migration("20240707111135_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -67,6 +67,9 @@ namespace BHA.Migrations
 
                     b.Property<decimal>("CustomerEffortScore")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CustomerLifetimeValue")
                         .HasColumnType("decimal(18,2)");

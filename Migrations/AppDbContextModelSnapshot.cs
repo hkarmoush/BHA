@@ -65,6 +65,9 @@ namespace BHA.Migrations
                     b.Property<decimal>("CustomerEffortScore")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("CustomerLifetimeValue")
                         .HasColumnType("decimal(18,2)");
 
