@@ -12,6 +12,7 @@ namespace Infrastructure.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Customer> customers { get; set; }
         public DbSet<CustomerRecord> CustomerRecords { get; set; }
+        public DbSet<ITRecord> ITRecords { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

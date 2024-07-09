@@ -53,6 +53,10 @@ public static class DbInitializer
         {
             SeedHRRecords(context);
         }
+        if (!context.ITRecords.Any())
+        {
+            SeedITRecords(context);
+        }
         context.SaveChanges();
     }
 
@@ -250,5 +254,32 @@ public static class DbInitializer
         };
 
         context.Users.Add(superAdmin);
+    }
+
+    private static void SeedITRecords(AppDbContext context)
+    {
+        var random = new Random();
+        var itRecords = new List<ITRecord>();
+
+        for (int year = 2023; year <= 2024; year++)
+        {
+            for (int month = 1; month <= 12; month++)
+            {
+                itRecords.Add(new ITRecord
+                {
+                    Id = Guid.NewGuid(),
+                    Date = new DateTime(year, month, 1),
+                    ITCosts = random.Next(10000, 50000),
+                    ProjectCostVariance = (decimal)(random.NextDouble() * 10 - 5), // Random value between -5 and 5
+                    TicketsResolved = random.Next(50, 150),
+                    TotalTickets = random.Next(100, 200),
+                    SystemUptime = (decimal)(random.NextDouble() * 100), // Random value between 0 and 100
+                    SLACompliance = (decimal)(random.NextDouble() * 100) // Random value between 0 and 100
+                });
+            }
+        }
+
+        context.ITRecords.AddRange(itRecords);
+        context.SaveChanges();
     }
 }
