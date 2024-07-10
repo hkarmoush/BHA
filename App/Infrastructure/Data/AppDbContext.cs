@@ -38,6 +38,8 @@ namespace Infrastructure.Data
             // Customer
             modelBuilder.Entity<Customer>().HasKey(c => c.Id);
             modelBuilder.Entity<CustomerRecord>().HasKey(cr => cr.Id);
+
+            modelBuilder.Entity<ITRecord>().HasKey(c => c.Id);
         }
     }
 }

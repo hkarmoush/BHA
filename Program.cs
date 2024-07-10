@@ -30,6 +30,9 @@ builder.Services.AddScoped<ICustomerRecordService, CustomerRecordService>();
 builder.Services.AddScoped<IHRRecordRepository, HRRecordRepository>();
 builder.Services.AddScoped<IHRRecordService, HRRecordService>();
 builder.Services.AddScoped<IHRKpiService, HRKpiService>();
+builder.Services.AddScoped<IITRecordRepository, ITRecordRepository>();
+builder.Services.AddScoped<IITRecordService, ITRecordService>();
+builder.Services.AddScoped<IITKpiService, ITKpiService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));

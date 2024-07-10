@@ -269,16 +269,23 @@ public static class DbInitializer
                 {
                     Id = Guid.NewGuid(),
                     Date = new DateTime(year, month, 1),
+                    ProjectEarnedValue = random.Next(1000, 10000),
+                    SecurityBreaches = random.Next(0, 10),
                     ITCosts = random.Next(10000, 50000),
-                    ProjectCostVariance = (decimal)(random.NextDouble() * 10 - 5), // Random value between -5 and 5
-                    TicketsResolved = random.Next(50, 150),
-                    TotalTickets = random.Next(100, 200),
-                    SystemUptime = (decimal)(random.NextDouble() * 100), // Random value between 0 and 100
-                    SLACompliance = (decimal)(random.NextDouble() * 100) // Random value between 0 and 100
+                    HelpDeskFirstCallResolution = random.Next(70, 100),
+                    InternalITServiceSatisfactionScore = random.Next(60, 100),
+                    ProjectCostVariance = random.Next(-5000, 5000),
+                    EnterpriseArchitectureComplianceRatio = random.Next(80, 100),
+                    AverageAgeOfITInfrastructure = random.Next(1, 10),
+                    IncidentResolutionIndex = random.Next(70, 100),
+                    WebsiteNonAvailability = random.Next(0, 10),
+                    ProjectScheduleVariance = random.Next(-5, 5),
+                    ITMaintenanceRatio = random.Next(5, 20),
+                    AverageAgeOfSoftware = random.Next(1, 5),
+                    SystemDowntime = random.Next(0, 10)
                 });
             }
         }
-
         context.ITRecords.AddRange(itRecords);
         context.SaveChanges();
     }

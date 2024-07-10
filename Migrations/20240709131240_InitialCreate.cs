@@ -116,6 +116,32 @@ namespace BHA.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ITRecords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProjectEarnedValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SecurityBreaches = table.Column<int>(type: "int", nullable: false),
+                    ITCosts = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    HelpDeskFirstCallResolution = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    InternalITServiceSatisfactionScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProjectCostVariance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EnterpriseArchitectureComplianceRatio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AverageAgeOfITInfrastructure = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IncidentResolutionIndex = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    WebsiteNonAvailability = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProjectScheduleVariance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ITMaintenanceRatio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AverageAgeOfSoftware = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SystemDowntime = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ITRecords", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Kpis",
                 columns: table => new
                 {
@@ -180,6 +206,9 @@ namespace BHA.Migrations
 
             migrationBuilder.DropTable(
                 name: "HRRecords");
+
+            migrationBuilder.DropTable(
+                name: "ITRecords");
 
             migrationBuilder.DropTable(
                 name: "Kpis");

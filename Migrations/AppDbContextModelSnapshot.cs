@@ -230,6 +230,62 @@ namespace BHA.Migrations
                     b.ToTable("HRRecords");
                 });
 
+            modelBuilder.Entity("ITRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AverageAgeOfITInfrastructure")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("AverageAgeOfSoftware")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("EnterpriseArchitectureComplianceRatio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HelpDeskFirstCallResolution")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ITCosts")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ITMaintenanceRatio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("IncidentResolutionIndex")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InternalITServiceSatisfactionScore")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProjectCostVariance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProjectEarnedValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ProjectScheduleVariance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SecurityBreaches")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SystemDowntime")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("WebsiteNonAvailability")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ITRecords");
+                });
+
             modelBuilder.Entity("Kpi", b =>
                 {
                     b.Property<Guid>("Id")
