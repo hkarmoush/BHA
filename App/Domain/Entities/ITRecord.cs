@@ -16,4 +16,5 @@ public class ITRecord
     public decimal ITMaintenanceRatio { get; set; }
     public decimal AverageAgeOfSoftware { get; set; }
     public decimal SystemDowntime { get; set; }
+    
 }

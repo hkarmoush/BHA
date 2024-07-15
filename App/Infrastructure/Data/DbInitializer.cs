@@ -1,5 +1,5 @@
 using Infrastructure.Data;
-
+// Seeder
 public static class DbInitializer
 {
     public static void Initialize(AppDbContext context)
@@ -57,6 +57,7 @@ public static class DbInitializer
         {
             SeedITRecords(context);
         }
+        
         context.SaveChanges();
     }
 

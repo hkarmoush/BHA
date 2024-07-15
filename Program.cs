@@ -19,17 +19,21 @@ builder.Services.AddScoped<IKpiRepository, KpiRepository>();
 builder.Services.AddScoped<IFinancialKpiService, FinancialKpiService>();
 builder.Services.AddScoped<ISalesRecordRepository, SalesRecordRepository>();
 builder.Services.AddScoped<IFinancialRecordRepository, FinancialRecordRepository>();
-builder.Services.AddScoped<IHRRecordRepository, HRRecordRepository>();
+
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerKpiService, CustomerKpiService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICustomerRecordRepository, CustomerRecordRepository>();
 builder.Services.AddScoped<ICustomerRecordService, CustomerRecordService>();
+
 builder.Services.AddScoped<IHRRecordRepository, HRRecordRepository>();
 builder.Services.AddScoped<IHRRecordService, HRRecordService>();
 builder.Services.AddScoped<IHRKpiService, HRKpiService>();
+
 builder.Services.AddScoped<IITRecordRepository, ITRecordRepository>();
 builder.Services.AddScoped<IITRecordService, ITRecordService>();
 builder.Services.AddScoped<IITKpiService, ITKpiService>();

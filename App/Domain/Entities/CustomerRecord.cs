@@ -13,4 +13,6 @@ public class CustomerRecord
     public int NetPromoterScore { get; set; }
     public bool IsLost { get; set; }
     public decimal CustomerEffortScore { get; set; }
+    
+    // Contains Business Logic
 }
